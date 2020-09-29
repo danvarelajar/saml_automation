@@ -17,58 +17,58 @@
       block:
         - name: prepare aaa
           template:
-          src: apm_calls/create_sp.j2
-          dest: apm_calls/create_sp.json
+            src: apm_calls/create_sp.j2
+            dest: apm_calls/create_sp.json
 
         - name: prepare idp connector
           template:
-          src: apm_calls/create_idp_conn.j2
-          dest: apm_calls/create_idp_conn.json
+            src: apm_calls/create_idp_conn.j2
+            dest: apm_calls/create_idp_conn.json
 
         - name: prepare agent ending-allow
           template:
-          src: apm_calls/create_ending-allow_agent.j2
-          dest: apm_calls/create_ending-allow_agent.json
+            src: apm_calls/create_ending-allow_agent.j2
+            dest: apm_calls/create_ending-allow_agent.json
 
         - name: prepare agent ending-deny
           template:
-          src: apm_calls/create_ending-deny_agent.j2
-          dest: apm_calls/create_ending-deny_agent.json
+            src: apm_calls/create_ending-deny_agent.j2
+            dest: apm_calls/create_ending-deny_agent.json
 
         - name: prepare agent aaa
           template:
-          src: apm_calls/create_aaa_agent.j2
-          dest: apm_calls/create_aaa_agent.json
+            src: apm_calls/create_aaa_agent.j2
+            dest: apm_calls/create_aaa_agent.json
     
         - name: prepare item ending-allow
           template:
-          src: apm_calls/create_pi_ending-allow_agent.j2
-          dest: apm_calls/create_pi_ending-allow_agent.json
+            src: apm_calls/create_pi_ending-allow_agent.j2
+            dest: apm_calls/create_pi_ending-allow_agent.json
 
         - name: prepare item ending-deny
           template:
-          src: apm_calls/create_ending-deny_agent.j2
-          dest: apm_calls/create_ending-deny_agent.json
+            src: apm_calls/create_ending-deny_agent.j2
+            dest: apm_calls/create_ending-deny_agent.json
 
         - name: prepare item saml
           template:
-          src: apm_calls/create_pi_saml_agent.j2
-          dest: apm_calls/create_pi_saml_agent.json
+            src: apm_calls/create_pi_saml_agent.j2
+            dest: apm_calls/create_pi_saml_agent.json
     
         - name: prepare item start
           template:
-          src: apm_calls/create_pi_start_agent.j2
-          dest: apm_calls/create_pi_start_agent.json
+            src: apm_calls/create_pi_start_agent.j2
+            dest: apm_calls/create_pi_start_agent.json
 
         - name: prepare access policy
           template:
-          src: apm_calls/create_access_policy.j2
-          dest: apm_calls/create_access_policy.json
+            src: apm_calls/create_access_policy.j2
+            dest: apm_calls/create_access_policy.json
 
         - name: prepare access profile
           template:
-          src: apm_calls/create_access_profile.j2
-          dest: apm_calls/create_access_profile.json
+            src: apm_calls/create_access_profile.j2
+            dest: apm_calls/create_access_profile.json
     
     - name: Copy certificate IDP cert
       copy:
