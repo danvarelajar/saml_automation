@@ -4,9 +4,9 @@
    "partition": "Common",
    "entityId": "https://sts.windows.net/e569f29e-b098-4cea-b6f0-48fa8532d64a/",
    "identityLocation": "subject",
-   "idpCertificate": "/Common/azure_ad.crt",
+   "idpCertificate": "/Common/{{ app_domain_name }}_idp_conn.crt",
    "idpCertificateReference": {
-   "link": "https://localhost/mgmt/tm/sys/file/ssl-cert/azure_ad.crt"
+   "link": "https://localhost/mgmt/tm/sys/file/ssl-cert/{{ app_domain_name }}_idp_conn.crt"
         },
    "locationSpecific": "false",
    "signArtifactResolutionRq": "false",
