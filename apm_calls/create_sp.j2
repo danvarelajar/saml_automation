@@ -1,0 +1,28 @@
+{
+     "kind": "tm:apm:aaa:saml:samlstate",
+     "name": "{{app_domain_name}}_aaa_saml",
+     "partition": "Common",
+     "assertionConsumerBinding": "http-post",
+     "entityId": "https://{{app_domain_name}}/sp",
+     "spCertificate": "/Common/{{app_domain_name}}.crt",
+     "spCertificateReference": {
+         "link": "https://localhost/mgmt/tm/sys/file/ssl-cert/{{app_domain_name}}.crt"
+     },
+     "spHost": "{{app_domain_name}}",
+     "spScheme": "https",
+     "spSignkey": "/Common/{{app_domain_name}}.key",
+     "spSignkeyReference": {
+         "link": "https://localhost/mgmt/tm/sys/file/ssl-key/{{app_domain_name}}.key"
+     },
+     "wantAssertionEncrypted": "false",
+     "wantAssertionSigned": "true",
+     "idpConnectors": [
+         {
+            "name": "{{app_domain_name}}_aaa_saml_idp_connector",
+            "partition": "Common",
+            "nameReference": {
+                "link": "https://localhost/mgmt/tm/apm/aaa/saml-idp-connector/{{app_domain_name}}_aaa_saml_idp_connector"
+            }
+         }
+     ]
+}

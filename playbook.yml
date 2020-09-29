@@ -1,0 +1,342 @@
+---
+- name: Deploy APM SAML SP Configuration
+  hosts: bigip_node2
+  become: no
+
+  vars:
+    bigip_user: "admin"
+    bigip_password: "changeme"
+    ip_address: 10.1.1.7
+    rest_api: "https://{{ ip_address }}"
+    basic: "{{ bigip_user }}:{{ bigip_password }}"
+    basic_encoded: "{{ basic | b64encode}}"
+    app_domain_name: "sp2.f5demo.local"
+
+  tasks:
+    - name: block to prepare APM apm_calls
+    block:
+      - name: prepare aaa
+        template:
+        src: apm_calls/create_sp.j2
+        dest: apm_calls/create_sp.json
+
+      - name: prepare idp connector
+        template:
+        src: apm_calls/create_idp_conn.j2
+        dest: apm_calls/create_idp_conn.json
+
+      - name: prepare agent ending-allow
+        template:
+        src: apm_calls/create_ending-allow_agent.j2
+        dest: apm_calls/create_ending-allow_agent.json
+
+      - name: prepare agent ending-deny
+        template:
+        src: apm_calls/create_ending-deny_agent.j2
+        dest: apm_calls/create_ending-deny_agent.json
+
+      - name: prepare agent aaa
+        template:
+        src: apm_calls/create_aaa_agent.j2
+        dest: apm_calls/create_aaa_agent.json
+    
+      - name: prepare item ending-allow
+        template:
+        src: apm_calls/create_pi_ending-allow_agent.j2
+        dest: apm_calls/create_pi_ending-allow_agent.json
+
+      - name: prepare item ending-deny
+        template:
+        src: apm_calls/create_ending-deny_agent.j2
+        dest: apm_calls/create_ending-deny_agent.json
+
+      - name: prepare item saml
+        template:
+        src: apm_calls/create_pi_saml_agent.j2
+        dest: apm_calls/create_pi_saml_agent.json
+    
+      - name: prepare item start
+        template:
+        src: apm_calls/create_pi_start_agent.j2
+        dest: apm_calls/create_pi_start_agent.json
+
+      - name: prepare access policy
+        template:
+        src: apm_calls/create_access_policy.j2
+        dest: apm_calls/create_access_policy.json
+
+      - name: prepare access profile
+        template:
+        src: apm_calls/create_access_profile.j2
+        dest: apm_calls/create_access_profile.json
+    
+    - name: Copy certificate Azure cert
+      copy:
+        src: azure_ad.crt
+        dest: /tmp/azure_ad.crt
+
+    - name: Copy certificates SP cert
+      copy:
+        src: sp2.f5demo.local.crt
+        dest: /tmp/sp2.f5demo.local.crt
+
+    - name: Copy certificates SP key
+      copy:
+        src: sp2.f5demo.local.key
+        dest: /tmp/sp2.f5demo.local.key
+
+    - name: Register transaction
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/transaction"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+      register: output
+
+    - name: Parsing transaction id
+      debug:
+        msg: "{{ output.json.transId }}"
+
+    - name: Install Azure Cert
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/sys/crypto/cert"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: '{"command":"install","name":"azure_ad.crt","from-local-file":"/var/tmp/azure_ad.crt"}'
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+    
+    - name: Install SP2 Cert
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/sys/crypto/cert"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: '{"command":"install","name":"sp2.f5demo.local.crt","from-local-file":"/var/tmp/sp2.f5demo.local.crt"}'
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Install SP2 Key
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/sys/crypto/key"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: '{"command":"install","name":"sp2.f5demo.local.key","from-local-file":"/var/tmp/sp2.f5demo.local.key"}'
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Create SAML Idp connector
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/aaa/saml-idp-connector/"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_idp_conn.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Create SAML SP entity
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/aaa/saml/"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_sp.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Create AAA agent
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/policy/agent/aaa-saml"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_aaa_agent.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Create Ending-allow agent
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/policy/agent/ending-allow"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_ending-allow_agent.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Create Ending-deny agent
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/policy/agent/ending-deny"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_ending-deny_agent.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Create policy ending-deny policy item
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/policy/policy-item"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_pi_ending-deny_agent.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Create policy ending-allow policy item
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/policy/policy-item"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_pi_ending-allow_agent.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Create policy saml policy item
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/policy/policy-item"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_pi_saml_agent.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Create policy start policy item
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/policy/policy-item"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_pi_start_agent.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+        
+    - name: Create Access policy
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/policy/access-policy"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_access_policy.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+    
+    - name: Create Access profile
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/profile/access"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          X-F5-REST-Coordination-Id: "{{output.json.transId}}"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','apm_calls/create_access_profile.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Commit transaction
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/transaction/{{ output.json.transId }}"
+        method: PATCH
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: '{ "state":"VALIDATING" }'
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+    
+    - name: Apply policy changes
+      uri:
+        url: "{{ rest_api }}/mgmt/tm/apm/profile/access/sp2.f5demo.local"
+        method: PATCH
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: '{ "generation-action": "increment" }'
+        status_code: 200
+        return_content: yes
+        validate_certs: no
+
+    - name: Cleanning
+      file:
+        path: /var/tmp/azure_ad.crt
+        state: absent
+    
+    - name: Cleanning
+      file:
+        path: /var/tmp/sp2.f5demo.local.crt
+        state: absent
+    
+    - name: Cleanning
+      file:
+        path: /var/tmp/sp2.f5demo.local.key
+        state: absent
+    

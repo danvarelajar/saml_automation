@@ -1,0 +1,10 @@
+{
+    "kind": "tm:apm:policy:agent:aaa-saml:aaa-samlstate",
+    "name": "{{app_domain_name}}_act_saml_auth_ag",
+    "partition": "Common",
+    "forceAuthn": "disable",
+    "server": "/Common/{{app_domain_name}}_aaa_saml",
+    "serverReference": {
+       "link": "https://localhost/mgmt/tm/apm/aaa/saml/{{app_domain_name}}_aaa_saml"
+    }
+}

@@ -1,0 +1,21 @@
+{
+   "kind": "tm:apm:aaa:saml-idp-connector:saml-idp-connectorstate",
+   "name": "{{app_domain_name}}_aaa_saml_idp_connector",
+   "partition": "Common",
+   "entityId": "https://sts.windows.net/e569f29e-b098-4cea-b6f0-48fa8532d64a/",
+   "identityLocation": "subject",
+   "idpCertificate": "/Common/azure_ad.crt",
+   "idpCertificateReference": {
+   "link": "https://localhost/mgmt/tm/sys/file/ssl-cert/azure_ad.crt"
+        },
+   "locationSpecific": "false",
+   "signArtifactResolutionRq": "false",
+   "signatureType": "rsa-sha256",
+   "singleLogoutBinding": "http-redirect",
+   "singleLogoutResponseUri": "https://login.microsoftonline.com/e569f29e-b098-4cea-b6f0-48fa8532d64a/saml2",
+   "singleLogoutUri": "https://login.microsoftonline.com/e569f29e-b098-4cea-b6f0-48fa8532d64a/saml2",
+   "ssoBinding": "http-redirect",
+   "ssoUri": "https://login.microsoftonline.com/e569f29e-b098-4cea-b6f0-48fa8532d64a/saml2",
+   "wantAuthnRequestSigned": "false",
+   "wantDetachedSignature": "false"
+}

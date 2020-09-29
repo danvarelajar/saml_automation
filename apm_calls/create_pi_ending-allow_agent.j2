@@ -1,0 +1,17 @@
+{
+   "kind": "tm:apm:policy:policy-item:policy-itemstate",
+   "name": "{{app_domain_name}}_end_allow",
+   "fullPath": "/Common/{{app_domain_name}}_end_allow",
+   "partition": "Common",
+   "caption": "Allow",
+   "color": 1,
+   "itemType": "ending",
+   "loop": "false",
+   "agents": [
+      {
+        "name": "{{app_domain_name}}_end_allow_ag",
+        "partition": "Common",
+        "type": "ending-allow"
+      }
+   ]
+}

@@ -1,0 +1,27 @@
+{
+            "kind": "tm:apm:policy:policy-item:policy-itemstate",
+            "name": "{{app_domain_name}}_saml_auth",
+            "partition": "Common",
+            "caption": "SAML Auth",
+            "color": 1,
+            "itemType": "action",
+            "loop": "false",
+            "agents": [
+                {
+                    "name": "{{app_domain_name}}_act_saml_auth_ag",
+                    "partition": "Common",
+                    "type": "aaa-saml"
+                }
+            ],
+            "rules": [
+                {
+                    "caption": "Successful",
+                    "expression": "expr {[mcget {session.saml.last.result}] == 1}",
+                    "nextItem": "/Common/{{app_domain_name}}_end_allow"
+                },
+                {
+                    "caption": "fallback",
+                    "nextItem": "/Common/{{app_domain_name}}_end_deny"
+                }
+            ]
+ }

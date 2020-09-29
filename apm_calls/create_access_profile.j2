@@ -1,0 +1,46 @@
+{
+            "kind": "tm:apm:profile:access:accessstate",
+            "name": "{{app_domain_name}}",
+            "partition": "Common",
+            "acceptLanguages": [
+                "en"
+            ],
+            "accessPolicy": "/Common/{{app_domain_name}}",
+            "accessPolicyReference": {
+                "link": "https://localhost/mgmt/tm/apm/policy/access-policy/{{app_domain_name}}"
+            },
+            "accessPolicyTimeout": 300,
+            "defaultLanguage": "en",
+            "defaultsFrom": "/Common/access",
+            "defaultsFromReference": {
+                "link": "https://localhost/mgmt/tm/apm/profile/access/~Common~access"
+            },
+            "domainMode": "single-domain",
+            "enforcePolicy": "true",
+            "generationAction": "noop",
+            "httponlyCookie": "false",
+            "inactivityTimeout": 900,
+            "logoutUriTimeout": 5,
+            "maxConcurrentSessions": 0,
+            "maxConcurrentUsers": 0,
+            "maxFailureDelay": 5,
+            "maxInProgressSessions": 128,
+            "maxSessionTimeout": 604800,
+            "minFailureDelay": 2,
+            "modifiedSinceLastPolicySync": "true",
+            "persistentCookie": "false",
+            "restrictToSingleClientIp": "false",
+            "scope": "profile",
+            "secureCookie": "true",
+            "type": "all",
+            "useHttp_503OnError": "false",
+            "userIdentityMethod": "http",
+            "logSettings": [
+                "/Common/default-log-setting"
+            ],
+            "logSettingsReference": [
+                {
+                    "link": "https://localhost/mgmt/tm/apm/log-setting/~Common~default-log-setting"
+                }
+            ]
+ }

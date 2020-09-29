@@ -1,0 +1,50 @@
+{
+    "kind": "tm:apm:policy:access-policy:access-policystate",
+    "name": "{{app_domain_name}}",
+    "partition": "Common",
+    "defaultEnding": "/Common/{{app_domain_name}}_end_deny",
+    "defaultEndingReference": {
+        "link": "https://localhost/mgmt/tm/apm/policy/policy-item/{{app_domain_name}}_end_deny"
+    },
+    "maxMacroLoopCount": 1,
+    "oneshotMacro": "false",
+    "startItem": "/Common/{{app_domain_name}}_ent",
+    "startItemReference": {
+        "link": "https://localhost/mgmt/tm/apm/policy/policy-item/{{app_domain_name}}_ent"
+    },
+    "type": "access-policy",
+    "items": [
+        {
+            "name": "{{app_domain_name}}_saml_auth",
+            "partition": "Common",
+            "priority": 0,
+            "nameReference": {
+                "link": "https://localhost/mgmt/tm/apm/policy/policy-item/{{app_domain_name}}_saml_auth"
+            }
+        },
+        {
+            "name": "{{app_domain_name}}_end_allow",
+            "partition": "Common",
+            "priority": 0,
+            "nameReference": {
+                "link": "https://localhost/mgmt/tm/apm/policy/policy-item/{{app_domain_name}}_end_allow"
+            }
+        },
+        {
+            "name": "{{app_domain_name}}_end_deny",
+            "partition": "Common",
+            "priority": 0,
+            "nameReference": {
+                "link": "https://localhost/mgmt/tm/apm/policy/policy-item/{{app_domain_name}}_end_deny"
+            }
+        },
+        {
+            "name": "{{app_domain_name}}_ent",
+            "partition": "Common",
+            "priority": 0,
+            "nameReference": {
+                "link": "https://localhost/mgmt/tm/apm/policy/policy-item/{{app_domain_name}}_ent"
+            }
+        }
+    ]
+}
