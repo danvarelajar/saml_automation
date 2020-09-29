@@ -70,10 +70,10 @@
         src: apm_calls/create_access_profile.j2
         dest: apm_calls/create_access_profile.json
     
-    - name: Copy certificate Azure cert
+    - name: Copy certificate IDP cert
       copy:
-        src: {{app_domain_name}}_idp_conn.crt
-        dest: /tmp/{{app_domain_name}}_idp_conn.crt
+        src: {{ app_domain_name }}_idp_conn.crt
+        dest: /tmp/{{ app_domain_name }}_idp_conn.crt
 
     - name: Copy certificates SP cert
       copy:
@@ -103,7 +103,7 @@
       debug:
         msg: "{{ output.json.transId }}"
 
-    - name: Install Azure Cert
+    - name: Install IDP Cert
       uri:
         url: "{{ rest_api }}/mgmt/tm/sys/crypto/cert"
         method: POST
