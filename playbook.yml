@@ -19,67 +19,67 @@
           template:
             src: apm_calls/create_sp.j2
             dest: apm_calls/create_sp.json
-            delegate_to: localhost
+          delegate_to: localhost
 
         - name: prepare idp connector
           template:
             src: apm_calls/create_idp_conn.j2
             dest: apm_calls/create_idp_conn.json
-            delegate_to: localhost
+          delegate_to: localhost
 
         - name: prepare agent ending-allow
           template:
             src: apm_calls/create_ending-allow_agent.j2
             dest: apm_calls/create_ending-allow_agent.json
-            delegate_to: localhost
+          delegate_to: localhost
 
         - name: prepare agent ending-deny
           template:
             src: apm_calls/create_ending-deny_agent.j2
             dest: apm_calls/create_ending-deny_agent.json
-            delegate_to: localhost
+          delegate_to: localhost
 
         - name: prepare agent aaa
           template:
             src: apm_calls/create_aaa_agent.j2
             dest: apm_calls/create_aaa_agent.json
-            delegate_to: localhost
+          delegate_to: localhost
     
         - name: prepare item ending-allow
           template:
             src: apm_calls/create_pi_ending-allow_agent.j2
             dest: apm_calls/create_pi_ending-allow_agent.json
-            delegate_to: localhost
+          delegate_to: localhost
 
         - name: prepare item ending-deny
           template:
             src: apm_calls/create_ending-deny_agent.j2
             dest: apm_calls/create_ending-deny_agent.json
-            delegate_to: localhost
+          delegate_to: localhost
 
         - name: prepare item saml
           template:
             src: apm_calls/create_pi_saml_agent.j2
             dest: apm_calls/create_pi_saml_agent.json
-            delegate_to: localhost
+          delegate_to: localhost
     
         - name: prepare item start
           template:
             src: apm_calls/create_pi_start_agent.j2
             dest: apm_calls/create_pi_start_agent.json
-            delegate_to: localhost
+          delegate_to: localhost
 
         - name: prepare access policy
           template:
             src: apm_calls/create_access_policy.j2
             dest: apm_calls/create_access_policy.json
-            delegate_to: localhost
+          delegate_to: localhost
 
         - name: prepare access profile
           template:
             src: apm_calls/create_access_profile.j2
             dest: apm_calls/create_access_profile.json
-            delegate_to: localhost
+          delegate_to: localhost
     
     - name: Copy certificate IDP cert
       copy:
