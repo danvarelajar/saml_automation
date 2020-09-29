@@ -14,76 +14,76 @@
 
   tasks:
     - name: block to prepare APM apm_calls
-    block:
-      - name: prepare aaa
-        template:
-        src: apm_calls/create_sp.j2
-        dest: apm_calls/create_sp.json
+      block:
+        - name: prepare aaa
+          template:
+          src: apm_calls/create_sp.j2
+          dest: apm_calls/create_sp.json
 
-      - name: prepare idp connector
-        template:
-        src: apm_calls/create_idp_conn.j2
-        dest: apm_calls/create_idp_conn.json
+        - name: prepare idp connector
+          template:
+          src: apm_calls/create_idp_conn.j2
+          dest: apm_calls/create_idp_conn.json
 
-      - name: prepare agent ending-allow
-        template:
-        src: apm_calls/create_ending-allow_agent.j2
-        dest: apm_calls/create_ending-allow_agent.json
+        - name: prepare agent ending-allow
+          template:
+          src: apm_calls/create_ending-allow_agent.j2
+          dest: apm_calls/create_ending-allow_agent.json
 
-      - name: prepare agent ending-deny
-        template:
-        src: apm_calls/create_ending-deny_agent.j2
-        dest: apm_calls/create_ending-deny_agent.json
+        - name: prepare agent ending-deny
+          template:
+          src: apm_calls/create_ending-deny_agent.j2
+          dest: apm_calls/create_ending-deny_agent.json
 
-      - name: prepare agent aaa
-        template:
-        src: apm_calls/create_aaa_agent.j2
-        dest: apm_calls/create_aaa_agent.json
+        - name: prepare agent aaa
+          template:
+          src: apm_calls/create_aaa_agent.j2
+          dest: apm_calls/create_aaa_agent.json
     
-      - name: prepare item ending-allow
-        template:
-        src: apm_calls/create_pi_ending-allow_agent.j2
-        dest: apm_calls/create_pi_ending-allow_agent.json
+        - name: prepare item ending-allow
+          template:
+          src: apm_calls/create_pi_ending-allow_agent.j2
+          dest: apm_calls/create_pi_ending-allow_agent.json
 
-      - name: prepare item ending-deny
-        template:
-        src: apm_calls/create_ending-deny_agent.j2
-        dest: apm_calls/create_ending-deny_agent.json
+        - name: prepare item ending-deny
+          template:
+          src: apm_calls/create_ending-deny_agent.j2
+          dest: apm_calls/create_ending-deny_agent.json
 
-      - name: prepare item saml
-        template:
-        src: apm_calls/create_pi_saml_agent.j2
-        dest: apm_calls/create_pi_saml_agent.json
+        - name: prepare item saml
+          template:
+          src: apm_calls/create_pi_saml_agent.j2
+          dest: apm_calls/create_pi_saml_agent.json
     
-      - name: prepare item start
-        template:
-        src: apm_calls/create_pi_start_agent.j2
-        dest: apm_calls/create_pi_start_agent.json
+        - name: prepare item start
+          template:
+          src: apm_calls/create_pi_start_agent.j2
+          dest: apm_calls/create_pi_start_agent.json
 
-      - name: prepare access policy
-        template:
-        src: apm_calls/create_access_policy.j2
-        dest: apm_calls/create_access_policy.json
+        - name: prepare access policy
+          template:
+          src: apm_calls/create_access_policy.j2
+          dest: apm_calls/create_access_policy.json
 
-      - name: prepare access profile
-        template:
-        src: apm_calls/create_access_profile.j2
-        dest: apm_calls/create_access_profile.json
+        - name: prepare access profile
+          template:
+          src: apm_calls/create_access_profile.j2
+          dest: apm_calls/create_access_profile.json
     
     - name: Copy certificate IDP cert
       copy:
         src: {{ app_domain_name }}_idp_conn.crt
-        dest: /tmp/{{ app_domain_name }}_idp_conn.crt
+        dest: /var/tmp/{{ app_domain_name }}_idp_conn.crt
 
     - name: Copy certificates SP cert
       copy:
-        src: sp2.f5demo.local.crt
-        dest: /tmp/sp2.f5demo.local.crt
+        src: {{ app_domain_name }}.crt
+        dest: /var/tmp/{{ app_domain_name }}.crt
 
     - name: Copy certificates SP key
       copy:
-        src: sp2.f5demo.local.key
-        dest: /tmp/sp2.f5demo.local.key
+        src: {{ app_domain_name }}.key
+        dest: /var/tmp/{{ app_domain_name }}.key
 
     - name: Register transaction
       uri:
@@ -112,7 +112,7 @@
           X-F5-REST-Coordination-Id: "{{output.json.transId}}"
           Authorization: "Basic {{ basic_encoded }}"
         body_format: json
-        body: '{"command":"install","name":"azure_ad.crt","from-local-file":"/var/tmp/azure_ad.crt"}'
+        body: '{"command":"install","name":"{{ app_domain_name }}_idp_conn.crt","from-local-file":"/var/tmp/{{ app_domain_name }}_idp_conn.crt"}'
         status_code: 200
         return_content: yes
         validate_certs: no
@@ -126,7 +126,7 @@
           X-F5-REST-Coordination-Id: "{{output.json.transId}}"
           Authorization: "Basic {{ basic_encoded }}"
         body_format: json
-        body: '{"command":"install","name":"sp2.f5demo.local.crt","from-local-file":"/var/tmp/sp2.f5demo.local.crt"}'
+        body: '{"command":"install","name":"{{ app_domain_name }}.crt","from-local-file":"/var/tmp/{{ app_domain_name }}.crt"}'
         status_code: 200
         return_content: yes
         validate_certs: no
@@ -140,7 +140,7 @@
           X-F5-REST-Coordination-Id: "{{output.json.transId}}"
           Authorization: "Basic {{ basic_encoded }}"
         body_format: json
-        body: '{"command":"install","name":"sp2.f5demo.local.key","from-local-file":"/var/tmp/sp2.f5demo.local.key"}'
+        body: '{"command":"install","name":"{{ app_domain_name }}.key","from-local-file":"/var/tmp/{{ app_domain_name }}.key"}'
         status_code: 200
         return_content: yes
         validate_certs: no
