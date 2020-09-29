@@ -325,7 +325,7 @@
     
     - name: Apply policy changes
       uri:
-        url: "{{ rest_api }}/mgmt/tm/apm/profile/access/sp2.f5demo.local"
+        url: "{{ rest_api }}/mgmt/tm/apm/profile/access/{{ app_domain_name }}"
         method: PATCH
         headers:
           Content-Type: "application/json"
@@ -338,16 +338,16 @@
 
     - name: Cleanning
       file:
-        path: /var/tmp/azure_ad.crt
+        path: "/var/tmp/{{ app_domain_name }}_idp_conn.crt"
         state: absent
     
     - name: Cleanning
       file:
-        path: /var/tmp/sp2.f5demo.local.crt
+        path: "/var/tmp/{{ app_domain_name }}.crt"
         state: absent
     
     - name: Cleanning
       file:
-        path: /var/tmp/sp2.f5demo.local.key
+        path: "/var/tmp/{{ app_domain_name }}.key"
         state: absent
     
