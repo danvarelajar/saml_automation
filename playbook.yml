@@ -72,18 +72,18 @@
     
     - name: Copy certificate IDP cert
       copy:
-        src: {{ app_domain_name }}_idp_conn.crt
-        dest: /var/tmp/{{ app_domain_name }}_idp_conn.crt
+        src: "{{ app_domain_name }}_idp_conn.crt"
+        dest: "/var/tmp/{{ app_domain_name }}_idp_conn.crt"
 
     - name: Copy certificates SP cert
       copy:
-        src: {{ app_domain_name }}.crt
-        dest: /var/tmp/{{ app_domain_name }}.crt
+        src: "{{ app_domain_name }}.crt"
+        dest: "/var/tmp/{{ app_domain_name }}.crt"
 
     - name: Copy certificates SP key
       copy:
-        src: {{ app_domain_name }}.key
-        dest: /var/tmp/{{ app_domain_name }}.key
+        src: "{{ app_domain_name }}.key"
+        dest: "/var/tmp/{{ app_domain_name }}.key"
 
     - name: Register transaction
       uri:
