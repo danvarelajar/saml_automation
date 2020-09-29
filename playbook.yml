@@ -72,8 +72,8 @@
     
     - name: Copy certificate Azure cert
       copy:
-        src: azure_ad.crt
-        dest: /tmp/azure_ad.crt
+        src: {{app_domain_name}}_idp_conn.crt
+        dest: /tmp/{{app_domain_name}}_idp_conn.crt
 
     - name: Copy certificates SP cert
       copy:
