@@ -53,8 +53,8 @@
 
         - name: prepare item ending-deny
           template:
-            src: apm_calls/create_ending-deny_agent.j2
-            dest: apm_calls/create_ending-deny_agent.json
+            src: apm_calls/create_pi_ending-deny_agent.j2
+            dest: apm_calls/create_pi_ending-deny_agent.json
           delegate_to: localhost
 
         - name: prepare item saml
