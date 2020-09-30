@@ -347,7 +347,7 @@
         return_content: yes
         validate_certs: no
         
-     - name: Send AS3 Declaration
+    - name: Send AS3 Declaration
       uri:
         url: "{{ rest_api }}/mgmt/shared/appsvcs/declare"
         method: POST
