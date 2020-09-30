@@ -4,13 +4,24 @@
   become: no
 
   vars:
+    # BIG-IP details, change accordingly
     bigip_user: "admin"
     bigip_password: "changeme"
     ip_address: 10.1.1.7
     rest_api: "https://{{ ip_address }}"
     basic: "{{ bigip_user }}:{{ bigip_password }}"
     basic_encoded: "{{ basic | b64encode}}"
+    # SP protected application domain name
     app_domain_name: "sp2.f5demo.local"
+    #IDP details
+    entity_id: "https://sts.windows.net/e569f29e-b098-4cea-b6f0-48fa8532d64a/"
+    #sso-binding options: http-redirect or http-post
+    sso_binding: "http-redirect"
+    sso_uri: "https://login.microsoftonline.com/e569f29e-b098-4cea-b6f0-48fa8532d64a/saml2"
+    #logout-binding options: http-redirect or http-post
+    logout_binding: "http-redirect"
+    single_logout_uri: "https://login.microsoftonline.com/e569f29e-b098-4cea-b6f0-48fa8532d64a/saml2"
+    single_logout_response_uri: "https://login.microsoftonline.com/e569f29e-b098-4cea-b6f0-48fa8532d64a/saml2"
 
   tasks:
     - name: block to prepare APM apm_calls
