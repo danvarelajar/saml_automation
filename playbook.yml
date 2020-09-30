@@ -91,6 +91,11 @@
             src: apm_calls/create_access_profile.j2
             dest: apm_calls/create_access_profile.json
           delegate_to: localhost
+        - name: prepare access profile
+          template:
+            src: as3_calls/as3.j2
+            dest: as3_calls/as3.json
+          delegate_to: localhost
     
     - name: Copy certificate IDP cert
       copy:
