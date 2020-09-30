@@ -3,7 +3,6 @@
     "class": "AS3",
     "action": "deploy",
     "persist": true,
-    "syncToGroup": "/Common/sync-failover-dg",
     "declaration": {
         "class": "ADC",
         "schemaVersion": "3.22.0",
@@ -12,7 +11,7 @@
         "remark": "HTTPS application",
         "Tenant1": {
             "class": "Tenant",
-            "sp2.f5demo.local": {
+            "{{ app_domain_name }}": {
                 "class": "Application",
                 "APMservice": {
                     "class": "Service_HTTPS",
