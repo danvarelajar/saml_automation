@@ -2,7 +2,7 @@
    "kind": "tm:apm:aaa:saml-idp-connector:saml-idp-connectorstate",
    "name": "{{app_domain_name}}_aaa_saml_idp_connector",
    "partition": "Common",
-   "entityId": "https://sts.windows.net/e569f29e-b098-4cea-b6f0-48fa8532d64a/",
+   "entityId": "{{ entity_id }}",
    "identityLocation": "subject",
    "idpCertificate": "/Common/{{ app_domain_name }}_idp_conn.crt",
    "idpCertificateReference": {
@@ -11,11 +11,11 @@
    "locationSpecific": "false",
    "signArtifactResolutionRq": "false",
    "signatureType": "rsa-sha256",
-   "singleLogoutBinding": "http-redirect",
-   "singleLogoutResponseUri": "https://login.microsoftonline.com/e569f29e-b098-4cea-b6f0-48fa8532d64a/saml2",
-   "singleLogoutUri": "https://login.microsoftonline.com/e569f29e-b098-4cea-b6f0-48fa8532d64a/saml2",
-   "ssoBinding": "http-redirect",
-   "ssoUri": "https://login.microsoftonline.com/e569f29e-b098-4cea-b6f0-48fa8532d64a/saml2",
+   "singleLogoutBinding": "{{ logout_binding }}",
+   "singleLogoutResponseUri": "{{ single_logout_response_uri }}",
+   "singleLogoutUri": "{{ single_logout_uri }}",
+   "ssoBinding": "{{ sso_binding }}",
+   "ssoUri": "{{ sso_uri }}",
    "wantAuthnRequestSigned": "false",
    "wantDetachedSignature": "false"
 }
