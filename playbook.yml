@@ -346,6 +346,19 @@
         status_code: 200
         return_content: yes
         validate_certs: no
+        
+     - name: Send AS3 Declaration
+      uri:
+        url: "{{ rest_api }}/mgmt/shared/appsvcs/declare"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Basic {{ basic_encoded }}"
+        body_format: json
+        body: "{{ lookup('file','as3_calls/as3.json') }}"
+        status_code: 200
+        return_content: yes
+        validate_certs: no
 
     - name: Cleanning
       file:
